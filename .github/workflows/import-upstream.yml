@@ -24,7 +24,10 @@ jobs:
 
       - name: Copy upstream project
         run: |
-          rsync -a --exclude='.git/' /tmp/codenotch-upstream/ ./
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.github/workflows/' \
+            /tmp/codenotch-upstream/ ./
           cat > ADELEID_NOTICE.md <<'EOF'
           # Codenotch — Adeleid V.1 Pro
 
@@ -49,6 +52,3 @@ jobs:
             git commit -m "Import Codenotch upstream and establish Adeleid V.1 Pro"
             git push origin HEAD:main
           fi
-
-      - name: Import marker
-        run: echo "Adeleid Codenotch V.1 Pro import complete"
