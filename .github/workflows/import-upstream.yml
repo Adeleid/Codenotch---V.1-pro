@@ -1,0 +1,51 @@
+name: Import Codenotch Upstream
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/import-upstream.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout destination repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Clone upstream Codenotch
+        run: |
+          git clone --depth 1 https://github.com/vinzdg/codenotch.git /tmp/codenotch-upstream
+
+      - name: Copy upstream project
+        run: |
+          rsync -a --exclude='.git/' /tmp/codenotch-upstream/ ./
+          cat > ADELEID_NOTICE.md <<'EOF'
+          # Codenotch — Adeleid V.1 Pro
+
+          This repository contains an Adeleid-maintained derivative of Codenotch.
+
+          Original project: Codenotch by Vinz (2026), licensed under the MIT License.
+          The original copyright notice and MIT license are retained in `LICENSE` as required by that license.
+
+          Copyright © 2026 Adeleid for original modifications, branding, additions, documentation, and other new work contributed in this repository.
+
+          No claim is made by Adeleid to exclusive ownership of the original upstream Codenotch code authored by Vinz or other upstream contributors.
+          EOF
+
+      - name: Commit imported source
+        run: |
+          git config user.name "Adeleid Import Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to import"
+          else
+            git commit -m "Import Codenotch upstream and establish Adeleid V.1 Pro"
+            git push origin HEAD:main
+          fi
