@@ -83,10 +83,9 @@ targets:
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         # --- Sparkle -------------------------------------------------------
         # Adeleid Pro builds must never poll the upstream maintainer's feed.
-        # This points to the Adeleid repository; automatic update checks stay
-        # disabled until Adeleid publishes a signed appcast for this fork.
-        SUFeedURL: https://raw.githubusercontent.com/Adeleid/Codenotch---V.1-pro/main/site/appcast.xml
-        SUPublicEDKey: ""
+        # Automatic update checks remain disabled until Adeleid publishes and
+        # signs its own update feed for this fork.
+        SUFeedURL: https://raw.githubusercontent.com/Adeleid/Codenotch---V.1-pro/pro-branding/site/appcast.xml
         SUEnableAutomaticChecks: false
         SUAutomaticallyUpdate: false
         SUScheduledCheckInterval: 86400
