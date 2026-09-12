@@ -3,6 +3,7 @@ name: Pro CI
 on:
   push:
     branches:
+      - main
       - pro-branding
   workflow_dispatch:
 
@@ -25,10 +26,29 @@ jobs:
           set -o pipefail
           make test-ci 2>&1 | tee ci-test.log
 
-      - name: Upload test log
+      - name: Build unsigned preview DMG
+        shell: bash
+        run: |
+          set -o pipefail
+          make dmg-ci 2>&1 | tee ci-dmg.log
+          mkdir -p dist
+          DMG="$(find build/ci -maxdepth 1 -name '*.dmg' -print -quit)"
+          test -n "$DMG"
+          cp "$DMG" "dist/Codenotch-V.1-Pro-preview.dmg"
+
+      - name: Upload Codenotch V.1 Pro DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: Codenotch-V.1-Pro-preview
+          path: dist/Codenotch-V.1-Pro-preview.dmg
+          if-no-files-found: error
+
+      - name: Upload CI logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ci-test-log
-          path: ci-test.log
+          name: ci-logs
+          path: |
+            ci-test.log
+            ci-dmg.log
           if-no-files-found: warn
