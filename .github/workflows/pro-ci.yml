@@ -20,4 +20,15 @@ jobs:
         run: brew install xcodegen
 
       - name: Generate and run tests
-        run: make test-ci
+        shell: bash
+        run: |
+          set -o pipefail
+          make test-ci 2>&1 | tee ci-test.log
+
+      - name: Upload test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-test-log
+          path: ci-test.log
+          if-no-files-found: warn
