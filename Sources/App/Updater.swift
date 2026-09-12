@@ -22,7 +22,7 @@ final class Updater: NSObject, ObservableObject, SPUUpdaterDelegate {
             case .upToDate:      return L10n.t("Codenotch V.1 Pro is up to date.")
             case .found(let v):  return L10n.t("Codenotch V.1 Pro version \(v) is available and will install shortly.")
             case .unreachable:
-                return L10n.t("Couldn't reach the Adeleid update feed. This copy will keep working normally.")
+                return L10n.t("Couldn't reach the Adeleid update feed. Nothing is wrong with this copy; Codenotch V.1 Pro will keep working normally.")
             case .failed(let why): return why
             }
         }
